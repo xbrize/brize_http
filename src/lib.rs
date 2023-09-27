@@ -1,14 +1,14 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+mod connect;
+pub mod request;
+pub mod response;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub use request::Request;
+pub use response::Response;
+use std::io::Write;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+pub fn send(req: Request) -> Response {
+    let mut stream = connect::make_stream_connection(&req.host, &req.port).unwrap();
+    stream.write_all(req.http().as_bytes()).unwrap();
+
+    response::parse_response(stream)
 }

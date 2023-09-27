@@ -12,3 +12,4 @@ categories = ["software"]
 
 
 [dependencies]
+native-tls = "0.2.11"
